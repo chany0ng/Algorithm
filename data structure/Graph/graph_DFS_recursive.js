@@ -29,6 +29,7 @@ class Graph {
     const result = [];
     const visited = [];
     const adjacencyList = this.adjacencyList;
+    // 즉시실행 함수로 start를 인자로 사용
     (function dfs(vertex) {
       if (!vertex) return null;
       visited[vertex] = true;
