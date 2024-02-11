@@ -39,6 +39,8 @@ class WeightedGraph {
     const distances = {}; // 시작점 -> 정점 거리 저장 역할
     const previous = {}; // 이전 경로 저장 역할
 
+    let path = []; // 최종 최단거리 경로 순서 저장 역할
+    let smallest;
     // 초기 시작점으로부터의 거리, 경로 설정
     for (let vertex in this.adjacencyList) {
       previous[vertex] = null;
@@ -55,14 +57,31 @@ class WeightedGraph {
       smallest = nodes.dequeue().val; // 가장 가까운 vertex 선택
       // 가까운 정점이 끝나는 정점이라면
       if (smallest === finish) {
+        console.table(distances);
+        while (previous[smallest]) {
+          path.push(smallest);
+          smallest = previous[smallest];
+        }
+        break;
       }
       // 가까운 정점이 주변점과 이어져 있을 때(거리가 무한대가 아니다)
       if (smallest || distances[smallest] !== Infinity) {
         for (let neighbor in this.adjacencyList[smallest]) {
-          let nextNode = this.adjacencyList;
+          let nextNode = this.adjacencyList[smallest][neighbor];
+
+          let candidate = distances[smallest] + nextNode.weight;
+          let nextNeighbor = nextNode.node;
+          // 기존 최단거리보다, 더 짧은 거리를 발견했을 때
+          if (candidate < distances[nextNeighbor]) {
+            distances[nextNeighbor] = candidate;
+            previous[nextNeighbor] = smallest;
+            nodes.enqueue(nextNeighbor, candidate); // 새로운 거리값을 우선순위큐에 최신화
+          }
         }
       }
     }
+    console.log(path.concat(smallest).reverse());
+    return path.concat(smallest).reverse();
   }
 }
 
