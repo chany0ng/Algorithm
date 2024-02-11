@@ -10,6 +10,7 @@ class PriorityQueue {
   bubbleUp() {
     let idx = this.values.length - 1;
     const element = this.values[idx];
+    // 우선순위가 작은 것이, root로 가게 하는 bubbleUp
     while (idx > 0) {
       let parentIdx = Math.floor((idx - 1) / 2);
       let parent = this.values[parentIdx];
